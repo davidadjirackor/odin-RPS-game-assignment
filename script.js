@@ -1,50 +1,70 @@
-        const add7 = function(number){
-            return number + 7;
-        };
-        console.log (add7(6));
+console.log("Hello World");
 
+// Step 2: Computer Choice
+function getComputerChoice() {
+  const randomNumber = Math.floor(Math.random() * 3);
 
-        const multiply = function (a, b){
-            return a*b;
-        };
-        console.log (multiply(2,3));
+  if (randomNumber === 0) {
+    return "rock";
+  } else if (randomNumber === 1) {
+    return "paper";
+  } else {
+    return "scissors";
+  }
+}
 
-      
-const capitalize = function(string) {
-    string = string.toLowerCase();
-    return string.charAt(0).toUpperCase() + string.slice(1);
-};
+// Step 3: Human Choice
+function getHumanChoice() {
+  const input = prompt("Enter rock, paper, or scissors:");
+  return input.toLowerCase(); // Make it case-insensitive
+}
 
-console.log(capitalize("heLLo"));  
+// Step 4: Scores
+let humanScore = 0;
+let computerScore = 0;
 
+// Step 5: Play a Single Round
+function playRound(humanChoice, computerChoice) {
+  console.log(`You chose: ${humanChoice}`);
+  console.log(`Computer chose: ${computerChoice}`);
 
-const lastLetter = function(string) {
-    return string.charAt(string.length - 1);
-};
+  if (humanChoice === computerChoice) {
+    console.log("It's a tie!");
+  } else if (
+    (humanChoice === "rock" && computerChoice === "scissors") ||
+    (humanChoice === "scissors" && computerChoice === "paper") ||
+    (humanChoice === "paper" && computerChoice === "rock")
+  ) {
+    humanScore++;
+    console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+  } else {
+    computerScore++;
+    console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+  }
 
-console.log(lastLetter("abcd"));
+  console.log(`Score — You: ${humanScore}, Computer: ${computerScore}`);
+  console.log("------------------------------");
+}
 
+// Step 6: Play the Full Game
+function playGame() {
+  humanScore = 0;
+  computerScore = 0;
 
-const getComputerChoice = function(){
-    let arr = ["Rock","Scissors","Paper"]
-    const randomNumber = Math.random();
-    console.log(randomNumber);
-    const randomIndex = Math.floor(randomNumber* arr.length);
-    console.log(randomIndex);
-    return arr[randomIndex];
-};
-console.log(getComputerChoice());
+  for (let i = 1; i <= 5; i++) {
+    console.log(`Round ${i}`);
+    const humanSelection = getHumanChoice();
+    const computerSelection = getComputerChoice();
+    playRound(humanSelection, computerSelection);
+  }
 
+  if (humanScore > computerScore) {
+    console.log("🎉 You win the game!");
+  } else if (computerScore > humanScore) {
+    console.log("😞 You lose the game!");
+  } else {
+    console.log("🤝 It's a draw!");
+  }
+}
 
-const getComputerChoice1 = function(){
-    const randomIndex = Math.floor(Math.random()* 3);
-    if( randomIndex === 1){
-        return "rock";
-    }else if (randomIndex === 2){
-        return "paper";
-    }
-    else{
-        return "Scissors";
-    }
-};
-console.log(getComputerChoice());
+playGame();
