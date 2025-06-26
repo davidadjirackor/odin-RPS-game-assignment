@@ -1,70 +1,58 @@
-console.log("Hello World");
-
-// Step 2: Computer Choice
-function getComputerChoice() {
-  const randomNumber = Math.floor(Math.random() * 3);
-
-  if (randomNumber === 0) {
-    return "rock";
-  } else if (randomNumber === 1) {
-    return "paper";
-  } else {
-    return "scissors";
-  }
-}
-
-// Step 3: Human Choice
-function getHumanChoice() {
-  const input = prompt("Enter rock, paper, or scissors:");
-  return input.toLowerCase(); // Make it case-insensitive
-}
-
-// Step 4: Scores
 let humanScore = 0;
 let computerScore = 0;
 
-// Step 5: Play a Single Round
-function playRound(humanChoice, computerChoice) {
-  console.log(`You chose: ${humanChoice}`);
-  console.log(`Computer chose: ${computerChoice}`);
+const resultText = document.getElementById("resultText");
+const scoreText = document.getElementById("scoreText");
 
+// Generate computer's choice
+function getComputerChoice() {
+  const randomNumber = Math.floor(Math.random() * 3);
+  if (randomNumber === 0) return "rock";
+  if (randomNumber === 1) return "paper";
+  return "scissors";
+}
+
+// Play one round
+function playRound(humanChoice, computerChoice) {
   if (humanChoice === computerChoice) {
-    console.log("It's a tie!");
+    return "It's a tie!";
   } else if (
     (humanChoice === "rock" && computerChoice === "scissors") ||
-    (humanChoice === "scissors" && computerChoice === "paper") ||
-    (humanChoice === "paper" && computerChoice === "rock")
+    (humanChoice === "paper" && computerChoice === "rock") ||
+    (humanChoice === "scissors" && computerChoice === "paper")
   ) {
     humanScore++;
-    console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+    return `You win! ${capitalize(humanChoice)} beats ${computerChoice}`;
   } else {
     computerScore++;
-    console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
-  }
-
-  console.log(`Score — You: ${humanScore}, Computer: ${computerScore}`);
-  console.log("------------------------------");
-}
-
-// Step 6: Play the Full Game
-function playGame() {
-  humanScore = 0;
-  computerScore = 0;
-
-  for (let i = 1; i <= 5; i++) {
-    console.log(`Round ${i}`);
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
-    playRound(humanSelection, computerSelection);
-  }
-
-  if (humanScore > computerScore) {
-    console.log("🎉 You win the game!");
-  } else if (computerScore > humanScore) {
-    console.log("😞 You lose the game!");
-  } else {
-    console.log("🤝 It's a draw!");
+    return `You lose! ${capitalize(computerChoice)} beats ${humanChoice}`;
   }
 }
 
-playGame();
+// Capitalize function
+function capitalize(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}
+
+// Handle button clicks
+function handleClick(e) {
+  if (humanScore >= 5 || computerScore >= 5) return;
+
+  const humanChoice = e.target.dataset.choice;
+  const computerChoice = getComputerChoice();
+  const roundResult = playRound(humanChoice, computerChoice);
+
+  resultText.textContent = roundResult;
+  scoreText.textContent = `You: ${humanScore} | Computer: ${computerScore}`;
+
+  if (humanScore === 5 || computerScore === 5) {
+    const winner = humanScore > computerScore ? "🎉 You won the game!" : "😞 You lost the game!";
+    resultText.textContent += ` ${winner}`;
+  }
+}
+
+// Add event listeners to buttons
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+  button.addEventListener("click", handleClick);
+});
